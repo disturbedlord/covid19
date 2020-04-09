@@ -256,14 +256,38 @@ var shadesOfColor = [
   "#69000d",
   "#67000d",
 ];
+
+const colorScale = (val) => {
+  if (val == -1) {
+    return "rgba(0,0,0,0)";
+  }
+  // console.log(val);
+  var result = Math.ceil(val / 2560) + offset;
+  // console.log("res : " + result);
+  return shadesOfColor[parseInt(result)];
+};
+const getVal = (feat) => {
+  for (var item of covid) {
+    if (item.id == feat.ISO_A3 || item.country == feat.NAME) {
+      return item.totalCases;
+    }
+  }
+  return -1;
+};
+var mostCases;
+var offset;
 var allCases;
+var covid;
 var noFlag =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/No_flag.svg/225px-No_flag.svg.png";
 var allDeaths, allRecovered;
-function globe(countries, covidData, cases, deaths, recovered) {
+function globe(countries, covidData, cases, deaths, recovered, maxCases) {
   allCases = cases;
   allDeaths = deaths;
   allRecovered = recovered;
+  covid = covidData;
+  mostCases = maxCases;
+  offset = 250 - Math.floor(mostCases / 2560);
   // console.log("globe");
   globe = Globe()
     .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
@@ -272,17 +296,9 @@ function globe(countries, covidData, cases, deaths, recovered) {
       "//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png"
     )
     .pointAltitude("size")
-    .polygonCapColor(
-      (feat) =>
-        "rgba(" +
-        getRndInteger() +
-        "," +
-        getRndInteger() +
-        "," +
-        getRndInteger() +
-        ", 0.6)"
-    )
+    .polygonCapColor((feat) => colorScale(getVal(feat.properties)))
     .polygonSideColor(() => "rgba(0, 100, 0, 0.05)")
+    .polygonStrokeColor(() => "#111")
     .polygonLabel(
       ({ properties: d, covid: c }) => `
     <div class="card">
@@ -314,7 +330,9 @@ function globe(countries, covidData, cases, deaths, recovered) {
       // console.log(hoverD);
       globe
         .polygonAltitude((d) => (d === hoverD ? 0.2 : 0.1))
-        .polygonCapColor((d) => (d === hoverD ? "" : ""));
+        .polygonCapColor((d) =>
+          d === hoverD ? "steelBlue" : colorScale(getVal(d.properties))
+        );
     })
     .polygonsTransitionDuration(300)
     .pointColor("color")(document.getElementById("globeViz"));
@@ -359,18 +377,12 @@ function setPosition(position) {
   document.getElementById("loading").style.display = "none";
 }
 
-function getRndInteger() {
-  var min = 0;
-  var max = 255;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 function getData(d, index) {
   var countryCode = d.ISO_A3;
   // console.log(countryCode);
   for (var data of covidData) {
     // console.log(data.id);
-    if (data.id == countryCode) {
+    if (data.id == countryCode || data.country == d.NAME) {
       switch (index) {
         case 0:
           return data.img;
