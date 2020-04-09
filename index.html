@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Muli&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="/style/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.8.6/dist/globe.gl.min.js"></script>
+    <title>Document</title>
+    <script src="/JS/main.js"></script>
+    <script>
+      var gData;
+      var globe;
+    </script>
+  </head>
+
+  <body onload="fetchData()">
+    <div id="container">
+      <div id="globeViz"></div>
+
+      <div class="loading" id="loading">
+        <div class="loader" id="loader"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="title">
+        Covid-19
+      </div>
+      <div class="fetching" id="fetchingData">
+        Loading countries affected by the virus...
+      </div>
+    </div>
+
+    <div class="bottom-info-container">
+      <div style="color: #e6f1ff; padding: 0 5px;">
+        INFECTED: <span id="infected">0</span> • DEATHS:
+        <span id="deaths">0</span> • RECOVERED: <span id="recovered">0</span>
+      </div>
+      <div style="margin-top: 5px;">
+        <a
+          href="https://www.worldometers.info/coronavirus/"
+          target="_BLANK"
+          style="color: #66ffa6; text-decoration: none;"
+          >Worldometers</a
+        >
+      </div>
+    </div>
+  </body>
+  <script src="/JS/globeJS.js"></script>
+</html>
