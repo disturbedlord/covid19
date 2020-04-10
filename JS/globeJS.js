@@ -262,6 +262,15 @@ const colorScale = (val) => {
     return "rgba(0,0,0,0)";
   }
   // console.log(val);
+  if (val < 256 - 100 - offset) {
+    if (val < 10) val = 20;
+    return shadesOfColor[parseInt(val)];
+  }
+  if (val > 256 - offset && val < 256) {
+    val = val & 256;
+    val += offset;
+    return shadesOfColor[parseInt(val)];
+  }
   var result = Math.ceil(val / 2560) + offset;
   // console.log("res : " + result);
   return shadesOfColor[parseInt(result)];
@@ -288,6 +297,7 @@ function globe(countries, covidData, cases, deaths, recovered, maxCases) {
   covid = covidData;
   mostCases = maxCases;
   offset = 250 - Math.floor(mostCases / 2560);
+
   // console.log("globe");
   globe = Globe()
     .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
@@ -305,7 +315,7 @@ function globe(countries, covidData, cases, deaths, recovered, maxCases) {
       <img class="card-img" src="${getData(d, 0)}" alt="flag" />
       <div class="container">
          <span class="card-title"><b>${d.ADMIN}</b></span> <br />
-         <span class="card-total-cases"> total cases</span>
+         <span class="card-total-cases">${getData(d, 6)} total cases</span>
          <div class="card-spacer"></div>
          <hr />
          <div class="card-spacer"></div>
@@ -396,6 +406,8 @@ function getData(d, index) {
           return data.todayCases;
         case 5:
           return data.todayDeaths;
+        case 6:
+          return data.totalCases;
       }
     }
   }
@@ -412,6 +424,8 @@ function getData(d, index) {
     case 4:
       return 0;
     case 5:
+      return 0;
+    case 6:
       return 0;
   }
 }
