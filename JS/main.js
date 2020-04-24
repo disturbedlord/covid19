@@ -15,7 +15,7 @@ function fetchData() {
       layer = countries;
       // console.log(countries);
     });
-  const getData = fetch("https://corona.lmao.ninja/countries?sort=country")
+  const getData = fetch("https://corona.lmao.ninja/v2/countries?sort=country")
     .then((res) => res.json())
     .then((fetchData) => {
       response = fetchData;

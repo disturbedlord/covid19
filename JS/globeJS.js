@@ -262,18 +262,19 @@ const colorScale = (val) => {
     return "rgba(0,0,0,0)";
   }
   // console.log(val);
-  if (val < 256 - 100 - offset) {
-    if (val < 10) val = 20;
-    return shadesOfColor[parseInt(val)];
-  }
-  if (val > 256 - offset && val < 256) {
-    val = val & 256;
-    val += offset;
-    return shadesOfColor[parseInt(val)];
-  }
-  var result = Math.ceil(val / 2560) + offset;
+  // if (val < 256 - offset) {
+  //   if (val < 10) val = 20;
+  //   return shadesOfColor[parseInt(val)];
+  // }
+  // if (val > 256 - offset && val < 256) {
+  //   val = val & 256;
+  //   val += offset;
+  //   return shadesOfColor[parseInt(val)];
+  // }
+  var result = Math.ceil(val / 2650) + offset;
+  if (result > 255) result = 255;
   // console.log("res : " + result);
-  return shadesOfColor[parseInt(result)];
+  return shadesOfColor[result];
 };
 const getVal = (feat) => {
   for (var item of covid) {
@@ -296,7 +297,25 @@ function globe(countries, covidData, cases, deaths, recovered, maxCases) {
   allRecovered = recovered;
   covid = covidData;
   mostCases = maxCases;
-  offset = 250 - Math.floor(mostCases / 2560);
+  toDivide = 255;
+  diff = parseInt(mostCases.toString().length) - 3;
+  // diff -= 1
+  // console.log(mostCases);
+  for (var i = 0; i < diff - 1; i++) {
+    toDivide *= 10;
+  }
+  toDivide = Math.ceil(mostCases / toDivide);
+  // console.log(toDivide);
+  len = mostCases.toString().length;
+  // console.log(len);
+  qq = toDivide.toString().length;
+  toDivide = parseInt(toDivide);
+  for (var i = 0; i < len - 2 - qq; i++) {
+    toDivide *= 10;
+  }
+  toDivide += 500;
+  // console.log(toDivide);
+  offset = 255 - Math.floor(mostCases / toDivide);
 
   // console.log("globe");
   globe = Globe()
