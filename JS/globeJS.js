@@ -305,12 +305,11 @@ function globe(countries, covidData, cases, deaths, recovered, maxCases) {
     toDivide *= 10;
   }
   toDivide = Math.ceil(mostCases / toDivide);
-  // console.log(toDivide);
   len = mostCases.toString().length;
-  // console.log(len);
+  console.log(len);
   qq = toDivide.toString().length;
   toDivide = parseInt(toDivide);
-  for (var i = 0; i < len - 2 - qq; i++) {
+  for (var i = 0; i < len - 3 - qq; i++) {
     toDivide *= 10;
   }
   toDivide += 500;
